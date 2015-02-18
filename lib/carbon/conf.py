@@ -49,6 +49,7 @@ defaults = dict(
   WHISPER_SPARSE_CREATE=False,
   WHISPER_FALLOCATE_CREATE=False,
   WHISPER_LOCK_WRITES=False,
+  WHISPER_CACHE_HEADERS=True,
   MAX_DATAPOINTS_PER_MESSAGE=500,
   MAX_AGGREGATION_INTERVALS=5,
   FORWARD_ALL=False,
@@ -229,6 +230,10 @@ class CarbonCacheOptions(usage.Options):
                 whisper.LOCK = True
             else:
                 log.err("WHISPER_LOCK_WRITES is enabled but import of fcntl module failed.")
+
+        if settings.WHISPER_CACHE_HEADERS:
+            log.msg("Enabling Whisper header caching")
+            whisper.CACHE_HEADERS = True
 
         if settings.CACHE_WRITE_STRATEGY not in ('sorted', 'max', 'naive'):
             log.err("%s is not a valid value for CACHE_WRITE_STRATEGY, defaulting to %s" %
