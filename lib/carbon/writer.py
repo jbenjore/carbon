@@ -53,7 +53,7 @@ if settings.MAX_UPDATES_PER_SECOND != float('inf'):
 def optimalWriteOrder():
   """Generates metrics with the most cached values first and applies a soft
   rate limit on new metrics"""
-  while MetricCache:
+  while MetricCache.has_ready():
     (metric, datapoints) = MetricCache.pop()
     if state.cacheTooFull and MetricCache.size < CACHE_SIZE_LOW_WATERMARK:
       events.cacheSpaceAvailable()
@@ -79,7 +79,7 @@ def optimalWriteOrder():
 def writeCachedDataPoints():
   "Write datapoints until the MetricCache is completely empty"
 
-  while MetricCache:
+  while MetricCache.has_ready():
     dataWritten = False
 
     for (metric, datapoints, dbFilePath, dbFileExists) in optimalWriteOrder():

@@ -69,7 +69,8 @@ defaults = dict(
   USE_WHITELIST=False,
   CARBON_METRIC_PREFIX='carbon',
   CARBON_METRIC_INTERVAL=60,
-  CACHE_WRITE_STRATEGY='sorted',
+  CACHE_WRITE_STRATEGY='time',
+  CACHE_WRITE_BUFFER_TIME=300,
   WRITE_BACK_FREQUENCY=None,
   ENABLE_LOGROTATION=True,
   LOG_LISTENER_CONNECTIONS=True,
@@ -230,7 +231,7 @@ class CarbonCacheOptions(usage.Options):
             else:
                 log.err("WHISPER_LOCK_WRITES is enabled but import of fcntl module failed.")
 
-        if settings.CACHE_WRITE_STRATEGY not in ('sorted', 'max', 'naive'):
+        if settings.CACHE_WRITE_STRATEGY not in ('sorted', 'max', 'naive', 'time'):
             log.err("%s is not a valid value for CACHE_WRITE_STRATEGY, defaulting to %s" %
                     (settings.CACHE_WRITE_STRATEGY, defaults['CACHE_WRITE_STRATEGY']))
         else:
